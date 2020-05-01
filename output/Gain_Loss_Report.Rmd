@@ -1,0 +1,123 @@
+---
+title: "My Portfolio"
+output: html_notebook
+---
+
+
+```{r pckg, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(dplyr)
+library(tidyquant)
+library(highcharter)
+library(gt)
+library(readr)
+library(pbapply)
+library(purrr)
+```
+
+```{r holdings, message=FALSE, warning=FALSE, include=FALSE}
+
+# Read data of lots defined in "holdings.csv" and creating "holdings" data frame
+holdings <- read_csv("~/R_projects/mypotfolio/data/holdings.csv")
+
+# Assinging today's date to any lots in the holdings data frame without a "sell_date"
+fill_up <- today()
+holdings$sell_date[is.na(holdings$sell_date)] <- as.Date(fill_up, format = "%Y%m%d")
+
+# Preparing the holdings DF adding more colunms
+holdings %>% 
+  select(-sell_date) %>% 
+  mutate(lot_value_at_buy = shares_hold * buy_price) %>% 
+  arrange(buy_date) %>% 
+  gt() %>% 
+  tab_header(
+    title = md("**Portfolio - Lots**")
+  ) %>%
+  cols_label(
+    ticker = "Ticker",
+    buy_date = "Date bought",
+    shares_hold = "Shares",
+    buy_price = "Price",
+    lot_value_at_buy = "Value invested"
+  ) %>% 
+   tab_source_note(
+    source_note = md("**Source:** holdings.csv")
+   ) %>% 
+  fmt_date(
+    columns = vars(buy_date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(buy_price, lot_value_at_buy),
+    currency = "USD"
+  )
+
+# Getting quotes for each lot in the porfolio
+df <- get_quotes("~/R_projects/mypotfolio/data/holdings.csv")
+
+# Defining a unique id for each lot
+ids <- unique(df$lot_ID)
+
+gl_min <- min(df$gain_loss)
+gl_max <- max(df$gain_loss)
+glp_min <- min(df$gl_pct)
+glp_max <- max(df$gl_pct)
+
+```
+
+```{r separated_lots, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[1])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```

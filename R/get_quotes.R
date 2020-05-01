@@ -30,7 +30,7 @@ get_quotes <- function(path_csv)  {
     dplyr::mutate(lot_value_at_close = close * shares_hold,
                   gain_loss = round(lot_value_at_close - lot_value_at_buy, 3),
                   gl_pct = round(gain_loss / lot_value_at_buy, 4),
-                  Lot_ID = paste0(symbol, "_", buy_date))
+                  lot_ID = paste0(symbol, "_", buy_date))
 
   prices_cleaned <- prices_cleaned
 
