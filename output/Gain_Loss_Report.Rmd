@@ -14,6 +14,7 @@ library(pbapply)
 library(purrr)
 ```
 
+## Summary of holdings
 ```{r holdings, message=FALSE, warning=FALSE, include=FALSE}
 
 # Read data of lots defined in "holdings.csv" and creating "holdings" data frame
@@ -64,12 +65,484 @@ glp_max <- max(df$gl_pct)
 
 ```
 
-```{r separated_lots, echo=FALSE, message=FALSE, warning=FALSE}
+## First Lot
+```{r lot_1, echo=FALSE, message=FALSE, warning=FALSE}
 
 # Creating charts for each lot
 
 dfx <- df %>% 
   filter(lot_ID == ids[1])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Second lot
+```{r lot_2, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[2])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Third lot
+```{r lot_3, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[3])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+## Fourth lot
+```{r lot_4, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[4])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Fifth lot
+```{r lot_5, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[5])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Sixth lot
+```{r lot_6, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[6])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Seventh lot
+```{r lot_7, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[7])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Eight lot
+```{r lot_8, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[8])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```
+
+## Nineth lot
+```{r lot_9, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[9])
   
 dfx %>% 
   filter(date ==  min(date) |
