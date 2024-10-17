@@ -1,7 +1,10 @@
 ## Import Dividend Table
 
 library(readxl)
+library(tidyr)
 library(dplyr)
+library(httr)
+library(highcharter)
 
 # Defining columns' types 
 nms <- c(rep("text", 4), rep("numeric",2),
@@ -11,10 +14,18 @@ nms <- c(rep("text", 4), rep("numeric",2),
          "text", rep("numeric", 3))
 
 # Importing Excel file to a tibble
-all_ccc <- read_xlsx("data/U.S.DividendChampions.xlsx",
+url_xls <- "https://bitly.com/USDividendChampions"
+GET(url_xls, write_disk(excel <- tempfile(fileext = ".xls")))
+all_ccc <- read_xlsx(excel,
                     sheet = "All CCC",
                     skip = 5,
                     col_types = nms)
+
+print(paste0("All_CCC table imported. Updated ",
+             names(read_xlsx(excel,
+                             sheet = "All CCC",
+                             range = "A3"))))
+
 
 # Refine names of tibble
 
@@ -71,3 +82,17 @@ var_nms[59] <- "TTM_ROA"
 names(all_ccc) <- var_nms
 
 head(all_ccc)
+
+reduced <- all_ccc %>% 
+  select(c(1:4, 9:11, 27, 29, 34:36, 40, 44:50))
+
+### Table with estimated dividends for mext 5 years 
+
+est_div <- reduced %>% 
+  select(Name, Symbol, Price,
+         Est_Div_2020, Est_Div_2021, Est_Div_2022, Est_Div_2023, Est_Div_2024,
+         Est_5yr_Total_payback, Est_5yr_Total_payback_pct) %>% 
+  gather(key = "year", value = "dividend",
+         c(-Name, -Symbol, -Price,
+           -Est_5yr_Total_payback, -Est_5yr_Total_payback_pct)) %>% 
+  arrange(desc(Est_5yr_Total_payback_pct))

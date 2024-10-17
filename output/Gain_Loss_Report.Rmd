@@ -594,3 +594,62 @@ dfx %>%
   plot_holdings()
 
 ```
+
+## Tenth lot
+```{r lot_10, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Creating charts for each lot
+
+dfx <- df %>% 
+  filter(lot_ID == ids[10])
+  
+dfx %>% 
+  filter(date ==  min(date) |
+           date == max(date) |
+           close == min(close) |
+           close == max(close)) %>%
+  select(date, close, lot_value_at_close, gain_loss, gl_pct) %>% 
+  gt() %>% 
+   tab_header(
+    title = paste("Lot of", dfx$symbol[1], "shares"),
+    subtitle = paste("bought in", dfx$date[1])
+  ) %>%
+  fmt_date(
+    columns = vars(date),
+    date_style = 13
+  ) %>%
+  fmt_currency(
+    columns = vars(close, lot_value_at_close, gain_loss),
+    currency = "USD"
+  ) %>%
+  fmt_percent(
+    columns = vars(gl_pct),
+    decimals = 2
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "green"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == max(dfx$gl_pct))
+  ) %>% 
+  tab_style(
+    style = cell_text(weight = "bold",
+                      color = "red"),
+    locations = cells_body(
+      columns = vars(gl_pct),
+      rows = gl_pct == min(dfx$gl_pct)
+      )
+    ) %>% 
+  cols_label(
+    date = "Date",
+    close = "Close price",
+    lot_value_at_close = "Lot value",
+    gain_loss = "P/L",
+    gl_pct = "P/L %"
+  )
+
+dfx %>% 
+  plot_holdings()
+
+```

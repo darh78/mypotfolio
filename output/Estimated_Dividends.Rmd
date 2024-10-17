@@ -1,0 +1,16 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Estimated dividens next 5 years
+
+```{r est_div, echo=FALSE}
+
+### Plot estimated dividends
+
+hchart(est_div, "line", 
+       hcaes(x = year, y = dividend, group = Symbol),
+       showInLegend = FALSE)
+```
+
